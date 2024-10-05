@@ -1,14 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
- #include <gsl/gsl_cblas.h>      // CBLAS in GSL (the GNU Scientific Library)
-//#include <gsl/gsl_spmatrix.h>
-//#include <gsl/gsl_vector.h>
+#include <gsl/gsl_cblas.h>      // CBLAS in GSL (the GNU Scientific Library)
+#include <gsl/gsl_spmatrix.h>
+#include <gsl/gsl_vector.h>
 #include "timer.h"
 #include "spmv.h"
 
 #define DEFAULT_SIZE 1024
 #define DEFAULT_DENSITY 0.25
+
+
+typedef struct {
+    int row;   
+    int col;   
+    double val; 
+} SparseMat;
+
 
 unsigned int populate_sparse_matrix(double mat[], unsigned int n, double density, unsigned int seed)
 {
@@ -126,9 +134,95 @@ int main(int argc, char *argv[])
   // Sparse computation using GSL's sparse algebra functions
   //
 
+    //
+  // Convert mat to a sparse format: CSR
+  // Use the gsl_spmatrix struct as datatype
+  //
+
+  gsl_spmatrix *sparse_mat = gsl_spmatrix_alloc(size, size);
+  
+  // Populate the sparse matrix from the dense matrix
+  for ( int i = 0; i < size; i++) {
+    for ( int j = 0; j < size; j++) {
+      double value = mat[i * size + j];
+      if (value != 0.0) {
+        gsl_spmatrix_set(sparse_mat, i, j, value);
+      }
+    }
+  }
+
+
+
+  //
+  // Sparse computation using GSL's sparse algebra functions
+  //
+  printf("\nSparse computation\n----------------\n");
+
+  gsl_vector *gsl_vec = gsl_vector_alloc(size);
+  gsl_vector *gsl_result = gsl_vector_alloc(size);
+
+  // Copy data from the dense vector to the GSL vector
+  for ( int i = 0; i < size; i++) {
+    gsl_vector_set(gsl_vec, i, vec[i]);
+  }
+
+  // Sparse matrix-vector multiplication using GSL's sparse algebra functions
+  timestamp(&start);
+
+  gsl_spblas_dgemv(CblasNoTrans, 1.0, sparse_mat, gsl_vec, 0.0, gsl_result);
+
+  timestamp(&now);
+  printf("Time taken by GSL sparse matrix-vector product: %ld ms\n", diff_milli(&start, &now));
+
+  // Copy the result back to the mysol array for comparison
+  for ( int i = 0; i < size; i++) {
+    mysol[i] = gsl_vector_get(gsl_result, i);
+    //printf ("%lf et ref %lf\n",mysol[i], refsol[i]);
+  }
+  if (check_result(refsol, mysol, size) == 1)
+    printf("Result is ok!\n");
+  else
+    printf("Result is wrong!\n");
+  printf("test");
+  // Free GSL resources
+  gsl_spmatrix_free(sparse_mat);
+  gsl_vector_free(gsl_vec);
+  gsl_vector_free(gsl_result);
+
+
   //
   // Your own sparse implementation
   //
+  printf("test2");
+  SparseMat *sparse = (SparseMat *)malloc(size * size * sizeof(SparseMat));
+
+  // Appel de la fonction
+  int non_zero_elements = my_sparse(size, mat, sparse);
+  printf("%d",non_zero_elements);
+
+  // Affichage des éléments non nuls
+  for (unsigned int i = 0; i < nnz; i++) {// pas nnz mais sparse[i].row
+    //printf("Element non nul: row=%d, col=%d, val=%lf\n", sparse[i].row, sparse[i].col, sparse[i].val);
+  }
+  int k1,n1,nplusun,diff,cont2 = 0;
+   int j;
+  printf("\n%d\t%d\n",sparse[size-1].row,sparse[nnz-2].col);
+  for ( int i = 0; i < size; i++){
+    n1=sparse[i].row;
+    nplusun=sparse[i+1].row;
+    //printf("\n%d\n",diff);
+    diff=nplusun-n1;
+    //printf("\n%d\n",diff);
+    for (j=0;j<diff;j++){
+    printf("Element non nul: row=%d, col=%d, val=%lf\n", i, sparse[cont2+j].col, sparse[cont2+j].val);
+    //printf("nnz = %d\n",nnz);
+    printf("cont2 = %d\n",cont2);
+    k1++;
+    }
+    cont2+=diff;
+    printf("\n%d\t%d\n",k1,nnz);
+  }
+  
 
   // Compare times (and computation correctness!)
 
