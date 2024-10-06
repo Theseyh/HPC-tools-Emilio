@@ -16,7 +16,6 @@ int cont=0, k=0;
 
   for (unsigned int i = 0; i < n; i++) {
     sparse[i].row=cont;
-    printf("%d\t%d\n",cont,i);
       for (unsigned int j = 0; j < n; j++) {
         
           if (mat[i * n + j]!=0){

@@ -7,7 +7,7 @@
 #include "timer.h"
 #include "spmv.h"
 
-#define DEFAULT_SIZE 1024    //1024
+#define DEFAULT_SIZE 4    //1024
 #define DEFAULT_DENSITY 0.25
 
 long my_dense_time,my_sparse_time,gsl_sparse_time,cblas_time;
@@ -82,7 +82,10 @@ int my_sparse_matvec(const unsigned int n, SparseMat sparse[], double vec[], dou
     diff=nplusun-n1;
     for (j=0;j<diff;j++){
       temp =sparse[cont2+j].col;
-      result[i] +=sparse[cont2+j].val * vec[temp];
+      result[temp] +=sparse[cont2+j].val * vec[temp];
+      if (temp=23){
+        printf("valeur de la mat=%f",sparse[cont2+j].val);
+      }
     }
     cont2+=diff;
   }
@@ -132,7 +135,7 @@ int main(int argc, char *argv[])
 
   timestamp(&now);
   cblas_time=diff_micro(&start, &now);
-  printf("Time taken by CBLAS dense computation: %ld μs\n", cblas_time);
+  printf("Time taken by CBLAS dense computation: %ld ms\n", cblas_time);
   
 
   //
@@ -144,7 +147,7 @@ int main(int argc, char *argv[])
 
   timestamp(&now);
   my_dense_time=diff_micro(&start, &now);
-  printf("Time taken by my dense matrix-vector product: %ld μs\n", my_dense_time);
+  printf("Time taken by my dense matrix-vector product: %ld ms\n", my_dense_time);
 
   if (check_result(refsol, mysol, size) == 1)
     printf("Result is ok!\n");
@@ -202,7 +205,7 @@ int main(int argc, char *argv[])
 
   timestamp(&now);
   gsl_sparse_time=diff_micro(&start, &now);
-  printf("Time taken by GSL sparse matrix-vector product: %ld μs\n", gsl_sparse_time);
+  printf("Time taken by GSL sparse matrix-vector product: %ld ms\n", gsl_sparse_time);
 
   // Copy the result back to the mysol array for comparison
   for ( int i = 0; i < size; i++) {
@@ -231,6 +234,28 @@ int main(int argc, char *argv[])
 //
 
 
+
+
+
+for (unsigned int i = 0; i < nnz; i++) {// pas nnz mais sparse[i].row
+    //printf("Element non nul: row=%d, col=%d, val=%lf\n", sparse[i].row, sparse[i].col, sparse[i].val);
+  }
+  int n1,nplusun,diff,cont2 = 0;
+   int j,k1=0;
+  printf("\n%d\t%d\n",sparse[size-1].row,sparse[nnz-2].col);
+  for ( int i = 0; i < size; i++){
+    n1=sparse[i].row;
+    nplusun=sparse[i+1].row;
+    //printf("\n%d\n",diff);
+    diff=nplusun-n1;
+    //printf("\n%d\n",diff);
+    for (j=0;j<diff;j++){
+    printf("\n%f et de la mat  \n",mat[i*size + sparse[cont2+j].col]-sparse[cont2+j].val);
+    //printf("nnz = %d\n",nnz);
+    k1++;
+    }
+    cont2+=diff;
+  }
   printf("\nMy Sparse computation\n----------------\n");
 
 
@@ -239,9 +264,13 @@ int main(int argc, char *argv[])
   my_sparse_matvec(size, sparse, vec, mysol);  // Replace with your sparse matrix-vector multiplication function
 
   
+  for (unsigned int i=0;i<size;i++){
+    printf("mysol=%f and solref=%f\n",mysol[i],refsol[i]);
+  }
+
   timestamp(&now);
   my_sparse_time=diff_micro(&start, &now);
-  printf("Time taken by my sparse matrix-vector product: %ld μs\n", my_sparse_time);
+  printf("Time taken by my sparse matrix-vector product: %ld ms\n", my_sparse_time);
 
 
 
@@ -259,10 +288,10 @@ int main(int argc, char *argv[])
   
 
   printf("\nTime Comparison:\n");
-  printf("CBLAS Dense computation: %ld μs\n", cblas_time);
-  printf("My Dense computation: %ld μs\n", my_dense_time);
-  printf("GSL Sparse computation: %ld μs\n", gsl_sparse_time);
-  printf("My Sparse computation: %ld μs\n", my_sparse_time);
+  printf("CBLAS Dense computation: %ld ms\n", cblas_time);
+  printf("My Dense computation: %ld ms\n", my_dense_time);
+  printf("GSL Sparse computation: %ld ms\n", gsl_sparse_time);
+  printf("My Sparse computation: %ld ms\n", my_sparse_time);
 
   if (check_result(refsol, mysol, size))  {
       printf("All results are correct!\n");
