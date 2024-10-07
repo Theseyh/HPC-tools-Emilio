@@ -151,9 +151,18 @@ int main(int argc, char *argv[])
   //
   // Using your own dense implementation
   //
+
+  // put the values of the vec result at 0 before my_dense
+    for ( int i = 0; i < size; i++) {
+        mysol[i] = 0.0;
+    }
+
+  
   timestamp(&start);
 
   my_dense(size, mat, vec, mysol);
+
+
 
   timestamp(&now);
   my_dense_time=diff_micro(&start, &now);
@@ -248,6 +257,12 @@ int main(int argc, char *argv[])
 
 
   printf("\nMy Sparse computation\n----------------\n");
+
+
+    // put the values of the vec result at 0 before my_sparse
+    for ( int i = 0; i < size; i++) {
+        mysol[i] = 0.0;
+    }
 
 
   timestamp(&start);
