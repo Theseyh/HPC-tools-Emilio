@@ -7,7 +7,7 @@
 #include "timer.h"
 #include "spmv.h"
 
-#define DEFAULT_SIZE 1024    //1024
+#define DEFAULT_SIZE 4024    //1024
 #define DEFAULT_DENSITY 0.25
 
 long my_dense_time,my_sparse_time,gsl_sparse_time,cblas_time;
@@ -75,14 +75,14 @@ int my_sparse_matvec(const unsigned int n, SparseMat sparse[], double vec[], dou
         result[i] = 0.0;
     }
     
-  int j,n1,nplusun,diff,temp,cont2 = 0;
-  for ( int i = 0; i < n; i++){
+  int j,n1,n2,diff,temp,cont2 = 0;
+  for (unsigned int i = 0; i < n; i++){
     n1=sparse[i].row;
-    nplusun=sparse[i+1].row;
-    diff=nplusun-n1;
+    n2=sparse[i+1].row;
+    diff=n2-n1;
     for (j=0;j<diff;j++){
-      temp =sparse[cont2+j].col;
-      result[i] +=sparse[cont2+j].val * vec[temp];
+      temp =cont2+j;
+      result[i] +=sparse[temp].val * vec[sparse[temp].col];
     }
     cont2+=diff;
   }
@@ -168,39 +168,42 @@ int main(int argc, char *argv[])
   // Use the gsl_spmatrix struct as datatype
   //
 
-  gsl_spmatrix *sparse_mat = gsl_spmatrix_alloc(size, size);
-  
-  // Populate the sparse matrix from the dense matrix
-  for ( int i = 0; i < size; i++) {
-    for ( int j = 0; j < size; j++) {
-      double value = mat[i * size + j];
-      if (value != 0.0) {
-        gsl_spmatrix_set(sparse_mat, i, j, value);
+ gsl_spmatrix *sparse_mat = gsl_spmatrix_alloc(size, size);
+
+  // Populate the sparse matrix in COO format from the dense matrix
+  for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+          double value = mat[i * size + j];
+          if (value != 0.0) {
+              gsl_spmatrix_set(sparse_mat, i, j, value);
+          }
       }
-    }
   }
 
+  // Convert the matrix from COO to CSR
+  gsl_spmatrix *sparse_mat_csr = gsl_spmatrix_compcol(sparse_mat); // COO to CSR conversion
 
+  // Now sparse_mat_csr is in CSR format and ready for use in sparse computations
 
-  //
   // Sparse computation using GSL's sparse algebra functions
-  //
-  printf("\nSparse computation\n----------------\n");
+  printf("\nSparse computation (CSR)\n----------------\n");
 
   gsl_vector *gsl_vec = gsl_vector_alloc(size);
   gsl_vector *gsl_result = gsl_vector_alloc(size);
 
   // Copy data from the dense vector to the GSL vector
-  for ( int i = 0; i < size; i++) {
-    gsl_vector_set(gsl_vec, i, vec[i]);
+  for (int i = 0; i < size; i++) {
+      gsl_vector_set(gsl_vec, i, vec[i]);
   }
 
-  // Sparse matrix-vector multiplication using GSL's sparse algebra functions
+  // Sparse matrix-vector multiplication using CSR format
   timestamp(&start);
 
-  gsl_spblas_dgemv(CblasNoTrans, 1.0, sparse_mat, gsl_vec, 0.0, gsl_result);
+  gsl_spblas_dgemv(CblasNoTrans, 1.0, sparse_mat_csr, gsl_vec, 0.0, gsl_result);
 
   timestamp(&now);
+
+
   gsl_sparse_time=diff_micro(&start, &now);
   printf("Time taken by GSL sparse matrix-vector product: %ld μs\n", gsl_sparse_time);
 
@@ -213,7 +216,7 @@ int main(int argc, char *argv[])
   else
     printf("Result is wrong!\n");
   // Free GSL resources
-  gsl_spmatrix_free(sparse_mat);
+  gsl_spmatrix_free(sparse_mat_csr);
   gsl_vector_free(gsl_vec);
   gsl_vector_free(gsl_result);
 
