@@ -67,28 +67,41 @@ unsigned int check_result(double ref[], double result[], unsigned int size)
   return 1;
 }
 
-int my_sparse_matvec(const unsigned int n, SparseMat sparse[], double vec[], double result[])
+
+
+int my_sparse_mat(const unsigned int n, const double mat[],SparseMat sparse[])
 {
 
-   // Initialiser le vecteur résultat à 0
-    for (unsigned int i = 0; i < n; i++) {
-        result[i] = 0.0;
-    }
-    
-  int j,n1,n2,diff,temp,cont2 = 0;
-  for (unsigned int i = 0; i < n; i++){
-    n1=sparse[i].row;
-    n2=sparse[i+1].row;
-    diff=n2-n1;
-    for (j=0;j<diff;j++){
-      temp =cont2+j;
-      result[i] +=sparse[temp].val * vec[sparse[temp].col];
-    }
-    cont2+=diff;
-  }
 
-    return 0; // Indiquer que l'exécution s'est bien passée
+int cont=0, k=0;
+
+
+  for (unsigned int i = 0; i < n; i++) {
+    sparse[i].row=cont;
+      for (unsigned int j = 0; j < n; j++) {
+        
+          if (mat[i * n + j]!=0){
+            cont++;
+            sparse[k].col=j;
+            sparse[k].val=mat[i * n + j];
+            k++;
+          }
+
+      }
+  }
+  sparse[n].row=cont;
+
+
+
+
+  // code your own solver
+  return(0);
 }
+
+
+
+
+
 
 
 int main(int argc, char *argv[])
@@ -226,7 +239,7 @@ int main(int argc, char *argv[])
   //
   SparseMat *sparse = (SparseMat *)malloc(size * size * sizeof(SparseMat));
 
-  my_sparse(size, mat, sparse);
+  my_sparse_mat(size, mat, sparse);
 
 
 //
@@ -239,7 +252,7 @@ int main(int argc, char *argv[])
 
   timestamp(&start);
 
-  my_sparse_matvec(size, sparse, vec, mysol);  // Replace with your sparse matrix-vector multiplication function
+  my_sparse(size, sparse, vec, mysol);  // Replace with your sparse matrix-vector multiplication function
 
   
   timestamp(&now);
