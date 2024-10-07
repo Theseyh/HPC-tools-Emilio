@@ -55,6 +55,8 @@ The table below summarizes the computation times for various methods, based on 1
 | **GSL Sparse**           | 299.5          | 2,965.05       | 289.5            |
 | **My Sparse**            | 403.5          | 5,743.05       | 371.0            |
 
+Since the execution times were relatively low, it would be ideal to test with a larger matrix to gain more accurate insights. However, as the results aligned with the expected performance patterns (cf Analysis), further scaling was not necessary for this work.
+
 ### Analysis
 
 - **My Dense** computations are the slowest, which is expected as the code is not optimized for dense matrix-vector multiplication. This leads to inefficient resource use and slower execution times.
