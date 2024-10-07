@@ -7,7 +7,7 @@
 #include "timer.h"
 #include "spmv.h"
 
-#define DEFAULT_SIZE 4024    //1024
+#define DEFAULT_SIZE 1024    //1024
 #define DEFAULT_DENSITY 0.25
 
 long my_dense_time,my_sparse_time,gsl_sparse_time,cblas_time;
