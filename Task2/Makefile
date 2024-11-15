@@ -1,7 +1,7 @@
 # Compiler and flags
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
-LIBS = -lopenblas -lgsl -lgslcblas -lm -g3 -g
+CC = icc
+CFLAGS = -Wall -Wextra -O3 -ftree-vectorize
+LIBS = -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lopenblas -lgsl -lgslcblas -lpthread -lm -g3 -g
 
 # Files
 OBJ = timer.o spmv.o my_dense.o my_sparse.o my_coo.o my_csc.o

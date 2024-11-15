@@ -1,28 +1,27 @@
 #include "spmv.h"
 
 typedef struct {
-    int row;   
-    int col;   
-    double val; 
+    int row;   // Row index or the starting index of non-zero elements in a row
+    int col;   // Column index of the non-zero element
+    double val; // Non-zero value
 } SparseMat;
 
 int my_sparse(const unsigned int n, SparseMat sparse[], double vec[], double result[])
 {
+    int j, start, end;
 
-    
-  int j,n1,n2,diff,temp,cont2 = 0;
-  for (unsigned int i = 0; i < n; i++){
-    n1=sparse[i].row;
-    n2=sparse[i+1].row;
-    diff=n2-n1;  // the number of element in the row i
-    for (j=0;j<diff;j++){
-      temp =cont2+j;
-      result[i] +=sparse[temp].val * vec[sparse[temp].col];
+    // Iterate through each row
+    for (unsigned int i = 0; i < n; i++) {
+        start = sparse[i].row;        // Starting index of non-zero elements in row i
+        end = sparse[i + 1].row;      // Ending index (exclusive) for non-zero elements in row i
+                                      // (end - start) gives the number of non-zero elements in row i
+
+        // Iterate over the non-zero elements in row i
+        for (j = start; j < end; j++) {
+            result[i] += sparse[j].val * vec[sparse[j].col]; 
+            // Multiply the non-zero value with the corresponding vector element and accumulate in the result
+        }
     }
-    cont2+=diff;
-  }
 
     return 0; 
 }
-
-

@@ -1,6 +1,0 @@
-The last column, Ref, will show the reference time for each operation, using GSL in Table 1 
-
-and Intel MKL in Table 2. (we have to do it )
-
-do not forget to do the test in the TF3
-

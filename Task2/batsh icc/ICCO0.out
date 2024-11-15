@@ -1,0 +1,206 @@
+slurmstepd: info: Setting TMPDIR to /scratch/9265968. Previous errors about TMPDIR can be discarded
+Run #1
+Matriz size: 16384 x 16384 (268435456 elements)
+26837519 non-zero elements (10.00%)
+
+Dense computation
+----------------
+Time taken by CBLAS dense computation: 134 ms
+Time taken by my dense matrix-vector product: 907 ms
+Result is ok!
+
+Sparse computation (CSR)
+----------------
+Result of CSR SpMV is ok!
+Time for CSR SpMV: 40 seconds
+Result of CSC SpMV is ok!
+Time for CSC SpMV: 36 seconds
+Time taken by GSL COO matrix-vector product: 88 ms
+Result of GSL COO is ok!
+
+My Sparse computation
+----------------
+csr result is correct!
+Time taken by my sparse matrix-vector product: 98 ms
+coo result is correct!
+MKL COO result is OKey
+MKL CSR result is OKey
+MKL CSC result is OKey
+
+Time Comparison:
+CBLAS Dense computation: 134 ms
+GSL CSR computation: 40 ms
+GSL COO computation: 88 ms
+GSL CSC computation: 36 ms
+MKL COO computation: 53 ms
+MKL CSR computation: 24 ms
+MKL CSC computation: 32 ms
+My Dense computation: 907 ms
+My CSR computation: 98 ms
+My COO computation: 148 ms
+My CSC computation: 106 ms
+All results are correct!
+Run #2
+Matriz size: 16384 x 16384 (268435456 elements)
+26837519 non-zero elements (10.00%)
+
+Dense computation
+----------------
+Time taken by CBLAS dense computation: 123 ms
+Time taken by my dense matrix-vector product: 904 ms
+Result is ok!
+
+Sparse computation (CSR)
+----------------
+Result of CSR SpMV is ok!
+Time for CSR SpMV: 40 seconds
+Result of CSC SpMV is ok!
+Time for CSC SpMV: 36 seconds
+Time taken by GSL COO matrix-vector product: 87 ms
+Result of GSL COO is ok!
+
+My Sparse computation
+----------------
+csr result is correct!
+Time taken by my sparse matrix-vector product: 98 ms
+coo result is correct!
+MKL COO result is OKey
+MKL CSR result is OKey
+MKL CSC result is OKey
+
+Time Comparison:
+CBLAS Dense computation: 123 ms
+GSL CSR computation: 40 ms
+GSL COO computation: 87 ms
+GSL CSC computation: 36 ms
+MKL COO computation: 49 ms
+MKL CSR computation: 23 ms
+MKL CSC computation: 32 ms
+My Dense computation: 904 ms
+My CSR computation: 98 ms
+My COO computation: 148 ms
+My CSC computation: 106 ms
+All results are correct!
+Run #3
+Matriz size: 16384 x 16384 (268435456 elements)
+26837519 non-zero elements (10.00%)
+
+Dense computation
+----------------
+Time taken by CBLAS dense computation: 128 ms
+Time taken by my dense matrix-vector product: 900 ms
+Result is ok!
+
+Sparse computation (CSR)
+----------------
+Result of CSR SpMV is ok!
+Time for CSR SpMV: 40 seconds
+Result of CSC SpMV is ok!
+Time for CSC SpMV: 36 seconds
+Time taken by GSL COO matrix-vector product: 87 ms
+Result of GSL COO is ok!
+
+My Sparse computation
+----------------
+csr result is correct!
+Time taken by my sparse matrix-vector product: 98 ms
+coo result is correct!
+MKL COO result is OKey
+MKL CSR result is OKey
+MKL CSC result is OKey
+
+Time Comparison:
+CBLAS Dense computation: 128 ms
+GSL CSR computation: 40 ms
+GSL COO computation: 87 ms
+GSL CSC computation: 36 ms
+MKL COO computation: 49 ms
+MKL CSR computation: 24 ms
+MKL CSC computation: 32 ms
+My Dense computation: 900 ms
+My CSR computation: 98 ms
+My COO computation: 147 ms
+My CSC computation: 106 ms
+All results are correct!
+Run #4
+Matriz size: 16384 x 16384 (268435456 elements)
+26837519 non-zero elements (10.00%)
+
+Dense computation
+----------------
+Time taken by CBLAS dense computation: 126 ms
+Time taken by my dense matrix-vector product: 901 ms
+Result is ok!
+
+Sparse computation (CSR)
+----------------
+Result of CSR SpMV is ok!
+Time for CSR SpMV: 40 seconds
+Result of CSC SpMV is ok!
+Time for CSC SpMV: 36 seconds
+Time taken by GSL COO matrix-vector product: 87 ms
+Result of GSL COO is ok!
+
+My Sparse computation
+----------------
+csr result is correct!
+Time taken by my sparse matrix-vector product: 98 ms
+coo result is correct!
+MKL COO result is OKey
+MKL CSR result is OKey
+MKL CSC result is OKey
+
+Time Comparison:
+CBLAS Dense computation: 126 ms
+GSL CSR computation: 40 ms
+GSL COO computation: 87 ms
+GSL CSC computation: 36 ms
+MKL COO computation: 49 ms
+MKL CSR computation: 24 ms
+MKL CSC computation: 32 ms
+My Dense computation: 901 ms
+My CSR computation: 98 ms
+My COO computation: 148 ms
+My CSC computation: 105 ms
+All results are correct!
+Run #5
+Matriz size: 16384 x 16384 (268435456 elements)
+26837519 non-zero elements (10.00%)
+
+Dense computation
+----------------
+Time taken by CBLAS dense computation: 125 ms
+Time taken by my dense matrix-vector product: 902 ms
+Result is ok!
+
+Sparse computation (CSR)
+----------------
+Result of CSR SpMV is ok!
+Time for CSR SpMV: 41 seconds
+Result of CSC SpMV is ok!
+Time for CSC SpMV: 36 seconds
+Time taken by GSL COO matrix-vector product: 87 ms
+Result of GSL COO is ok!
+
+My Sparse computation
+----------------
+csr result is correct!
+Time taken by my sparse matrix-vector product: 98 ms
+coo result is correct!
+MKL COO result is OKey
+MKL CSR result is OKey
+MKL CSC result is OKey
+
+Time Comparison:
+CBLAS Dense computation: 125 ms
+GSL CSR computation: 41 ms
+GSL COO computation: 87 ms
+GSL CSC computation: 36 ms
+MKL COO computation: 49 ms
+MKL CSR computation: 24 ms
+MKL CSC computation: 32 ms
+My Dense computation: 902 ms
+My CSR computation: 98 ms
+My COO computation: 148 ms
+My CSC computation: 105 ms
+All results are correct!
