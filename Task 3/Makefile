@@ -1,7 +1,7 @@
 # Compiler and flags
-CC = icc
-CFLAGS = -Wall -Wextra -O3 -ftree-vectorize
-LIBS = -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lopenblas -lgsl -lgslcblas -lpthread -lm -g3 -g
+CC = gcc
+CFLAGS = -g -c -Wall -Wextra -O3 -ftree-vectorize
+LIBS = -lopenblas -lgsl -lgslcblas -lpthread -lm -g3 -g
 
 # Files
 OBJ = timer.o spmv.o my_dense.o my_sparse.o my_coo.o my_csc.o
@@ -44,3 +44,4 @@ clean:
 
 # PHONY to avoid issues when file named 'clean' exists
 .PHONY: clean
+
